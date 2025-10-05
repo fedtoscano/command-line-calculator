@@ -1,5 +1,6 @@
 #include "calc-parser.h" 
 #include <stdio.h>
+#include <stdlib.h>
 
 TokenType token_lookup[ASCII_SIZE] = {TOKEN_UNKNOWN};
 
@@ -30,14 +31,72 @@ void print_token_lookup() {
 }
 
 
-void parse_opstr(const char *str){
-    while(*str != '\0'){
-        TokenType token = token_lookup[(unsigned char) *str];
-        if(token != TOKEN_UNKNOWN && *str != ' ' && *str != '\n')
-            printf("Token: %d for char: %c\n", token, str);
-        str++;
+TokenArray tokenize(const char* input){
+    TokenArray token_array = {0};
+
+    while(*input != '\0'){
+        if(*input == ' ' || *input == '\n'){
+            input++;
+            continue;
+        }
+
+        //check TokenType
+        TokenType type = token_lookup[(unsigned char) *input];
+
+        //if number
+        if(type == TOKEN_NUM){
+            token_array.tokens[token_array.count].type = TOKEN_NUM;
+            token_array.tokens[token_array.count].value = strtod(input, (char**)&input);
+            token_array.count++;
+            continue;
+        }
+
+        //if operator or bracket
+        if(type != TOKEN_UNKNOWN){
+            token_array.tokens[token_array.count].type = type;
+            token_array.tokens[token_array.count].value = 0;
+            token_array.count++;
+        }
+
+        input++;
     }
-	printf("%c", str);
+
+    return token_array;
 }
 
-TokenArray tokenize(const char* input){}
+double evaluate(TokenArray* tokens){}
+
+
+//Prints the TokenArray (debug method)
+void print_token_array(const TokenArray* array) {
+    printf("\n=== Token Array Contents ===\n");
+    for (int i = 0; i < array->count; i++) {
+        printf("Token[%d]: ", i);
+        switch (array->tokens[i].type) {
+            case TOKEN_NUM:
+                printf("NUMBER (%.2f)\n", array->tokens[i].value);
+                break;
+            case TOKEN_ADD:
+                printf("OPERATOR (+)\n");
+                break;
+            case TOKEN_SOTTR:
+                printf("OPERATOR (-)\n");
+                break;
+            case TOKEN_MOLT:
+                printf("OPERATOR (*)\n");
+                break;
+            case TOKEN_DIV:
+                printf("OPERATOR (/)\n");
+                break;
+            case TOKEN_OPEN_ROUND_BR:
+                printf("BRACKET ()\n");
+                break;
+            case TOKEN_CLOSED_ROUND_BR:
+                printf("BRACKET ()\n");
+                break;
+            default:
+                printf("UNKNOWN\n");
+        }
+    }
+    printf("=========================\n");
+}

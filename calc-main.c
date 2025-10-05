@@ -10,9 +10,11 @@ int main(void){
 	fgets(opstr, 100, stdin);
 
 	token_lookup_init();
-	parse_opstr(opstr);
+	
 
-	printf("%s", opstr);
+	TokenArray tokens = tokenize(opstr);
+	print_token_array(&tokens);
+
 	return 0;
 }
 

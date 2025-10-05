@@ -22,21 +22,22 @@ typedef enum{
 
 //Token
 typedef struct {
-	TokenType type;
+	TokenType type; // ref to TokenType
 	double value; //storage of numeric values
 } Token;
 
 //Token Array
 typedef struct {
-	Token tokens[100];
+	Token tokens[100]; //ref to Token
 	int count; //number of found tokens
 } TokenArray;
 
 extern TokenType token_lookup[ASCII_SIZE];
 TokenArray tokenize(const char* input);
-double evaluate(TokenArray* tokens);
+double evaluate(TokenArray*);
 
 void print_token_lookup();
 void token_lookup_init();
+void print_token_array(const TokenArray* array);
 void parse_opstr(const char* c);
 #endif
