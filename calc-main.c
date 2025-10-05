@@ -10,6 +10,7 @@ int main(void){
 	fgets(opstr, 100, stdin);
 
 	token_lookup_init();
+	parse_opstr(opstr);
 
 	printf("%s", opstr);
 	return 0;
